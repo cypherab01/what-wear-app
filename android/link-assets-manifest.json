@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Raleway-Italic-VariableFont_wght.ttf",
+      "sha1": "c6aeae4288b3b7f230096ccfa1e455af55e19f6a"
+    },
+    {
+      "path": "src/assets/fonts/Raleway-VariableFont_wght.ttf",
+      "sha1": "033e1328adda368109649349a674c71f08f3b393"
+    }
+  ]
+}

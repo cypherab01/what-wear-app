@@ -83,14 +83,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: '800',
+    fontWeight: '700',
     textAlign: 'center',
     color: colors.primary.blue,
     fontFamily: 'Raleway-VariableFont_wght',
   },
   description: {
-    fontSize: 16,
-    fontWeight: '300',
+    fontSize: 18,
+    fontWeight: '400',
     width: '80%',
     lineHeight: 25,
     maxWidth: '90%',

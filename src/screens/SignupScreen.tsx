@@ -13,11 +13,12 @@ import {Button, TextInput} from 'react-native-paper';
 import React from 'react';
 import {NavigationProp} from '@react-navigation/native';
 
-export default function LoginScreen({
+export default function SignupScreen({
   navigation,
 }: {
   navigation: NavigationProp<any>;
 }) {
+  const [fullName, setFullName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -34,8 +35,18 @@ export default function LoginScreen({
         <View style={styles.content}>
           <Text style={styles.title}>{siteConfig.name}</Text>
           <Text style={styles.loginText}>
-            Login to your {siteConfig.name} account
+            Sign up for a {siteConfig.name} account
           </Text>
+
+          <TextInput
+            textColor={colors.neutral.textPrimary}
+            theme={{colors: {primary: colors.primary.blue}}}
+            label="Full Name"
+            value={fullName}
+            onChangeText={setFullName}
+            style={styles.input}
+          />
+
           <TextInput
             textColor={colors.neutral.textPrimary}
             theme={{colors: {primary: colors.primary.blue}}}
@@ -61,15 +72,15 @@ export default function LoginScreen({
           </Text>
 
           <Button mode="contained" onPress={handleLogin} style={styles.button}>
-            Login
+            Sign up
           </Button>
 
           <View style={styles.signupContainer}>
-            <Text style={styles.signupText}>Don't have an account?</Text>
+            <Text style={styles.signupText}>Already have an account?</Text>
             <Text
               style={styles.signupLink}
-              onPress={() => navigation.navigate('SignupScreen')}>
-              Sign up
+              onPress={() => navigation.navigate('LoginScreen')}>
+              Login
             </Text>
           </View>
         </View>

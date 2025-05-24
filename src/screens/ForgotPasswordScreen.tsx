@@ -1,3 +1,5 @@
+import {NavigationProp} from '@react-navigation/native';
+import React from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -7,13 +9,11 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {Button, TextInput} from 'react-native-paper';
 import colors from '../../Colors';
 import {siteConfig} from '../config/data';
-import {Button, TextInput} from 'react-native-paper';
-import React from 'react';
-import {NavigationProp} from '@react-navigation/native';
 
-export default function LoginScreen({
+export default function ForgotPasswordScreen({
   navigation,
 }: {
   navigation: NavigationProp<any>;
@@ -34,7 +34,7 @@ export default function LoginScreen({
         <View style={styles.content}>
           <Text style={styles.title}>{siteConfig.name}</Text>
           <Text style={styles.loginText}>
-            Login to your {siteConfig.name} account
+            Forgot your password? Enter your email to reset it.
           </Text>
           <TextInput
             textColor={colors.neutral.textPrimary}
@@ -44,34 +44,10 @@ export default function LoginScreen({
             onChangeText={setEmail}
             style={styles.input}
           />
-          <TextInput
-            textColor={colors.neutral.textPrimary}
-            theme={{colors: {primary: colors.primary.blue}}}
-            label="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-            style={styles.input}
-          />
-
-          <Text
-            style={styles.forgotPassword}
-            onPress={() => navigation.navigate('ForgotPasswordScreen')}>
-            Forgot password?
-          </Text>
 
           <Button mode="contained" onPress={handleLogin} style={styles.button}>
-            Login
+            Submit
           </Button>
-
-          <View style={styles.signupContainer}>
-            <Text style={styles.signupText}>Don't have an account?</Text>
-            <Text
-              style={styles.signupLink}
-              onPress={() => navigation.navigate('SignupScreen')}>
-              Sign up
-            </Text>
-          </View>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -96,33 +72,17 @@ const styles = StyleSheet.create({
     color: colors.primary.blue,
   },
   loginText: {
-    alignSelf: 'center',
     fontSize: 16,
+    textAlign: 'center',
+    maxWidth: '70%',
+    alignSelf: 'center',
     color: colors.neutral.textSecondary,
   },
   input: {
     backgroundColor: colors.neutral.white,
   },
-  forgotPassword: {
-    fontSize: 16,
-    color: colors.primary.blue,
-    alignSelf: 'flex-end',
-    paddingRight: 4,
-  },
+
   button: {
     marginTop: 10,
-  },
-  signupContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 4,
-  },
-  signupText: {
-    fontSize: 16,
-    color: colors.neutral.textSecondary,
-  },
-  signupLink: {
-    fontSize: 16,
-    color: colors.primary.blue,
   },
 });

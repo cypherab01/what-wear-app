@@ -8,10 +8,12 @@ import {
   View,
 } from 'react-native';
 import colors from '../../Colors';
-import {siteConfig} from '../config/data';
+import {siteConfig} from '../config/site-config';
 import {Button, TextInput} from 'react-native-paper';
 import React from 'react';
 import {NavigationProp} from '@react-navigation/native';
+import Heading1 from '../components/Typography/Heading';
+import Description from '../components/Typography/Description';
 
 export default function SignupScreen({
   navigation,
@@ -33,10 +35,10 @@ export default function SignupScreen({
       style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.content}>
-          <Text style={styles.title}>{siteConfig.name}</Text>
-          <Text style={styles.loginText}>
+          <Heading1>{siteConfig.name}</Heading1>
+          <Description style={styles.loginText}>
             Sign up for a {siteConfig.name} account
-          </Text>
+          </Description>
 
           <TextInput
             textColor={colors.neutral.textPrimary}
@@ -108,8 +110,6 @@ const styles = StyleSheet.create({
   },
   loginText: {
     alignSelf: 'center',
-    fontSize: 16,
-    color: colors.neutral.textSecondary,
   },
   input: {
     backgroundColor: colors.neutral.white,

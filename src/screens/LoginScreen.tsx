@@ -8,10 +8,12 @@ import {
   View,
 } from 'react-native';
 import colors from '../../Colors';
-import {siteConfig} from '../config/data';
+import {siteConfig} from '../config/site-config';
 import {Button, TextInput} from 'react-native-paper';
 import React from 'react';
 import {NavigationProp} from '@react-navigation/native';
+import Heading1 from '../components/Typography/Heading';
+import Description from '../components/Typography/Description';
 
 export default function LoginScreen({
   navigation,
@@ -32,10 +34,10 @@ export default function LoginScreen({
       style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.content}>
-          <Text style={styles.title}>{siteConfig.name}</Text>
-          <Text style={styles.loginText}>
+          <Heading1>{siteConfig.name}</Heading1>
+          <Description style={styles.loginText}>
             Login to your {siteConfig.name} account
-          </Text>
+          </Description>
           <TextInput
             textColor={colors.neutral.textPrimary}
             theme={{colors: {primary: colors.primary.blue}}}
@@ -89,16 +91,8 @@ const styles = StyleSheet.create({
     gap: 20,
     padding: 20,
   },
-  title: {
-    alignSelf: 'center',
-    fontSize: 24,
-    fontWeight: '800',
-    color: colors.primary.blue,
-  },
   loginText: {
     alignSelf: 'center',
-    fontSize: 16,
-    color: colors.neutral.textSecondary,
   },
   input: {
     backgroundColor: colors.neutral.white,

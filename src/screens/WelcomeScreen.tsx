@@ -1,8 +1,10 @@
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import {siteConfig} from '../config/data';
+import {siteConfig} from '../config/site-config';
 import {Button} from 'react-native-paper';
 import colors from '../../Colors';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
+import Heading1 from '../components/Typography/Heading';
+import Description from '../components/Typography/Description';
 
 type RootStackParamList = {
   LoginScreen: undefined;
@@ -24,8 +26,8 @@ export default function WelcomeScreen() {
           />
         </View>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>{siteConfig.name}</Text>
-          <Text style={styles.description}>{siteConfig.description}</Text>
+          <Heading1>{siteConfig.name}</Heading1>
+          <Description>{siteConfig.description}</Description>
         </View>
       </View>
       <View style={styles.footer}>
@@ -80,22 +82,6 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     gap: 10,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    textAlign: 'center',
-    color: colors.primary.blue,
-    fontFamily: 'Raleway-VariableFont_wght',
-  },
-  description: {
-    fontSize: 18,
-    fontWeight: '400',
-    width: '80%',
-    lineHeight: 25,
-    maxWidth: '90%',
-    textAlign: 'center',
-    fontFamily: 'Raleway-VariableFont_wght',
   },
   footer: {
     flex: 1,

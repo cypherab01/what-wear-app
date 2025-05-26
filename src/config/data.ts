@@ -1,8 +1,69 @@
-export const siteConfig = {
-  name: 'WhatWear',
-  description:
-    'WhatWear, simple yet useful app to help you decide what to wear',
-  creator: 'Abhishek Ghimire',
-  creatorEmail: 'aghimire074@gmail.com',
-  creatorWebsite: 'https://www.abhishekg.com.np',
-};
+export const DATA = [
+  {
+    title: 'Main dishes',
+    data: [
+      {
+        name: 'T-Shirt',
+        image: 'https://picsum.photos/300',
+      },
+
+      {
+        name: 'Shirt',
+        image: 'https://picsum.photos/300',
+      },
+
+      {
+        name: 'T-Shirt',
+        image: 'https://picsum.photos/300',
+      },
+
+      {
+        name: 'T-Shirt',
+        image: 'https://picsum.photos/300',
+      },
+    ],
+  },
+  {
+    title: 'Sides',
+    data: [
+      {
+        name: 'T-Shirt',
+        image: 'https://picsum.photos/300',
+      },
+      {
+        name: 'T-Shirt',
+        image: 'https://picsum.photos/300',
+      },
+      {
+        name: 'T-Shirt',
+        image: 'https://picsum.photos/300',
+      },
+    ],
+  },
+  {
+    title: 'Drinks',
+    data: [
+      {
+        name: 'T-Shirt',
+        image: 'https://picsum.photos/300',
+      },
+    ],
+  },
+  {
+    title: 'Desserts',
+    data: [
+      {
+        name: 'T-Shirt',
+        image: 'https://picsum.photos/300',
+      },
+      {
+        name: 'T-Shirt',
+        image: 'https://picsum.photos/300',
+      },
+      {
+        name: 'T-Shirt',
+        image: 'https://picsum.photos/300',
+      },
+    ],
+  },
+];

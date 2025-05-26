@@ -11,7 +11,9 @@ import {
 } from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import colors from '../../Colors';
-import {siteConfig} from '../config/data';
+import {siteConfig} from '../config/site-config';
+import Description from '../components/Typography/Description';
+import Heading1 from '../components/Typography/Heading';
 
 export default function ForgotPasswordScreen({
   navigation,
@@ -32,10 +34,10 @@ export default function ForgotPasswordScreen({
       style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.content}>
-          <Text style={styles.title}>{siteConfig.name}</Text>
-          <Text style={styles.loginText}>
+          <Heading1>{siteConfig.name}</Heading1>
+          <Description style={styles.loginText}>
             Forgot your password? Enter your email to reset it.
-          </Text>
+          </Description>
           <TextInput
             textColor={colors.neutral.textPrimary}
             theme={{colors: {primary: colors.primary.blue}}}
@@ -72,11 +74,9 @@ const styles = StyleSheet.create({
     color: colors.primary.blue,
   },
   loginText: {
-    fontSize: 16,
     textAlign: 'center',
     maxWidth: '70%',
     alignSelf: 'center',
-    color: colors.neutral.textSecondary,
   },
   input: {
     backgroundColor: colors.neutral.white,

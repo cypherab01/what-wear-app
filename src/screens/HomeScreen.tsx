@@ -36,7 +36,7 @@ export default function HomeScreen() {
             <Heading1 style={styles.headerText}>T-Shirts</Heading1>
           }
         /> */}
-        ‚
+
         <SectionList
           sections={DATA}
           keyExtractor={(item, index) => item.name + index}

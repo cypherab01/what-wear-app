@@ -1,4 +1,5 @@
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -14,6 +15,8 @@ import React from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import Heading1 from '../components/Typography/Heading';
 import Description from '../components/Typography/Description';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {API_BASE_URL} from '@env';
 
 export default function LoginScreen({
   navigation,
@@ -22,10 +25,62 @@ export default function LoginScreen({
 }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const handleLogin = () => {
-    console.log(email, password);
-    navigation.navigate('HomeScreen');
+  const handleLogin = async () => {
+    if (!email && !password) {
+      Alert.alert('Error', 'Please enter your email and password');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert('Error', 'Please enter a valid email address');
+      return;
+    }
+
+    if (password.length < 8) {
+      Alert.alert('Error', 'Password must be at least 8 characters long');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${API_BASE_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({email, password}),
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        const token = data?.token;
+        await AsyncStorage.setItem('token', token);
+        navigation.navigate('HomeScreen');
+        console.log(data, 'response from login if ok');
+      } else if (response.status === 404) {
+        const data = await response.json();
+        Alert.alert('Error', data.error);
+      } else if (response.status === 403) {
+        Alert.alert('Error', 'Please signup again and verify your email', [
+          {text: 'OK', onPress: () => navigation.navigate('SignupScreen')},
+        ]);
+      } else if (response.status === 401) {
+        const data = await response.json();
+        Alert.alert('Error', data.error);
+      } else {
+        Alert.alert('Error', 'Something went wrong');
+      }
+    } catch (error) {
+      Alert.alert(
+        'Error',
+        'Something went wrong, make sure you are connected to the internet',
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -62,8 +117,13 @@ export default function LoginScreen({
             Forgot password?
           </Text>
 
-          <Button mode="contained" onPress={handleLogin} style={styles.button}>
-            Login
+          <Button
+            mode="contained"
+            disabled={isLoading}
+            onPress={handleLogin}
+            style={styles.button}
+            loading={isLoading}>
+            {isLoading ? 'Logging in...' : 'Login'}
           </Button>
 
           <View style={styles.signupContainer}>

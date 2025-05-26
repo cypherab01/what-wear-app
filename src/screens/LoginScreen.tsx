@@ -17,6 +17,7 @@ import Heading1 from '../components/Typography/Heading';
 import Description from '../components/Typography/Description';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {API_BASE_URL} from '@env';
+import {validateEmail} from '../utils/validate-email';
 
 export default function LoginScreen({
   navigation,
@@ -33,8 +34,9 @@ export default function LoginScreen({
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    const isEmailValid = validateEmail(email);
+
+    if (!isEmailValid) {
       Alert.alert('Error', 'Please enter a valid email address');
       return;
     }

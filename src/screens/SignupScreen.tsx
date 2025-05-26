@@ -1,4 +1,5 @@
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -14,6 +15,8 @@ import React from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import Heading1 from '../components/Typography/Heading';
 import Description from '../components/Typography/Description';
+import {env} from '../config/env';
+import {validateEmail} from '../utils/validate-email';
 
 export default function SignupScreen({
   navigation,
@@ -24,9 +27,68 @@ export default function SignupScreen({
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const handleLogin = () => {
-    console.log(email, password);
-    navigation.navigate('HomeScreen');
+  const handleSignup = async () => {
+    try {
+      if (!fullName || !email || !password) {
+        Alert.alert('Error', 'Please fill all the fields');
+        return;
+      }
+
+      if (fullName.length < 3) {
+        Alert.alert('Error', 'Full name must be at least 3 characters long');
+        return;
+      }
+
+      const isEmailValid = validateEmail(email);
+
+      if (!isEmailValid) {
+        Alert.alert('Error', 'Please enter a valid email address');
+        return;
+      }
+
+      if (password.length < 8) {
+        Alert.alert('Error', 'Password must be at least 8 characters long');
+        return;
+      }
+
+      const response = await fetch(`${env.API_BASE_URL}/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({name: fullName, email, password}),
+      });
+
+      if (response.status === 201) {
+        Alert.alert('Success', 'Signup successful, please verify your email', [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('OTPVerify', {email}),
+          },
+        ]);
+      } else if (response.status === 403) {
+        const data = await response.json();
+        Alert.alert('Verify Email', data.error, [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('OTPVerify', {email}),
+          },
+        ]);
+      } else if (response.status === 409) {
+        const data = await response.json();
+        Alert.alert('Error', data.error, [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('LoginScreen'),
+          },
+        ]);
+      }
+    } catch (error) {
+      Alert.alert(
+        'Error',
+        'Something went wrong, make sure you are connected to the internet',
+      );
+    }
   };
 
   return (
@@ -73,7 +135,7 @@ export default function SignupScreen({
             Forgot password?
           </Text>
 
-          <Button mode="contained" onPress={handleLogin} style={styles.button}>
+          <Button mode="contained" onPress={handleSignup} style={styles.button}>
             Sign up
           </Button>
 

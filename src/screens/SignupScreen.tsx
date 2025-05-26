@@ -1,3 +1,11 @@
+import {API_BASE_URL} from '@env';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import React, {useEffect} from 'react';
 import {
   Alert,
   Keyboard,
@@ -8,24 +16,41 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import colors from '../../Colors';
-import {siteConfig} from '../config/site-config';
 import {Button, TextInput} from 'react-native-paper';
-import React from 'react';
-import {NavigationProp} from '@react-navigation/native';
-import Heading1 from '../components/Typography/Heading';
+import colors from '../../Colors';
 import Description from '../components/Typography/Description';
-import {env} from '../config/env';
+import Heading1 from '../components/Typography/Heading';
+import {siteConfig} from '../config/site-config';
 import {validateEmail} from '../utils/validate-email';
 
-export default function SignupScreen({
-  navigation,
-}: {
-  navigation: NavigationProp<any>;
-}) {
+type RootStackParamList = {
+  WelcomeScreen: undefined;
+  LoginScreen: undefined;
+  OTPVerify: {email: string};
+  ForgotPasswordScreen: {userEmail?: string};
+  SignupScreen: {userEmail?: string};
+  HomeScreen: undefined;
+};
+
+type SignupScreenRouteProp = RouteProp<RootStackParamList, 'SignupScreen'>;
+
+export default function SignupScreen() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const route = useRoute<SignupScreenRouteProp>();
+  const userEmail = route.params?.userEmail;
+
   const [fullName, setFullName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+
+  // if userEmail is provided, set the email to the userEmail
+  useEffect(() => {
+    if (userEmail) {
+      setEmail(userEmail);
+    }
+  }, [userEmail]);
+
+  console.log(userEmail, 'userEmail');
 
   const handleSignup = async () => {
     try {
@@ -51,7 +76,7 @@ export default function SignupScreen({
         return;
       }
 
-      const response = await fetch(`${env.API_BASE_URL}/signup`, {
+      const response = await fetch(`${API_BASE_URL}/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -128,12 +153,6 @@ export default function SignupScreen({
             onChangeText={setPassword}
             style={styles.input}
           />
-
-          <Text
-            style={styles.forgotPassword}
-            onPress={() => navigation.navigate('ForgotPasswordScreen')}>
-            Forgot password?
-          </Text>
 
           <Button mode="contained" onPress={handleSignup} style={styles.button}>
             Sign up

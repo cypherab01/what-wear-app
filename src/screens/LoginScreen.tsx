@@ -12,18 +12,24 @@ import colors from '../../Colors';
 import {siteConfig} from '../config/site-config';
 import {Button, TextInput} from 'react-native-paper';
 import React from 'react';
-import {NavigationProp} from '@react-navigation/native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import Heading1 from '../components/Typography/Heading';
 import Description from '../components/Typography/Description';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {API_BASE_URL} from '@env';
 import {validateEmail} from '../utils/validate-email';
 
-export default function LoginScreen({
-  navigation,
-}: {
-  navigation: NavigationProp<any>;
-}) {
+type RootStackParamList = {
+  WelcomeScreen: undefined;
+  LoginScreen: undefined;
+  OTPVerify: {email: string};
+  ForgotPasswordScreen: {userEmail?: string};
+  SignupScreen: {userEmail?: string};
+  HomeScreen: undefined;
+};
+
+export default function LoginScreen() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
@@ -61,13 +67,17 @@ export default function LoginScreen({
         const token = data?.token;
         await AsyncStorage.setItem('token', token);
         navigation.navigate('HomeScreen');
-        console.log(data, 'response from login if ok');
       } else if (response.status === 404) {
         const data = await response.json();
-        Alert.alert('Error', data.error);
+        Alert.alert('404 Not found', data.error);
       } else if (response.status === 403) {
-        Alert.alert('Error', 'Please signup again and verify your email', [
-          {text: 'OK', onPress: () => navigation.navigate('SignupScreen')},
+        const data = await response.json();
+        Alert.alert('Verification required', data.error, [
+          {
+            text: 'OK',
+            onPress: () =>
+              navigation.navigate('SignupScreen', {userEmail: email}),
+          },
         ]);
       } else if (response.status === 401) {
         const data = await response.json();
@@ -115,7 +125,9 @@ export default function LoginScreen({
 
           <Text
             style={styles.forgotPassword}
-            onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+            onPress={() =>
+              navigation.navigate('ForgotPasswordScreen', {userEmail: email})
+            }>
             Forgot password?
           </Text>
 
@@ -132,7 +144,9 @@ export default function LoginScreen({
             <Text style={styles.signupText}>Don't have an account?</Text>
             <Text
               style={styles.signupLink}
-              onPress={() => navigation.navigate('SignupScreen')}>
+              onPress={() =>
+                navigation.navigate('SignupScreen', {userEmail: email})
+              }>
               Sign up
             </Text>
           </View>

@@ -6,14 +6,16 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import OTPVerify from '../screens/OTPVerify';
+import ConfirmReset from '../screens/ConfirmReset';
 
 type RootStackParamList = {
   WelcomeScreen: undefined;
   LoginScreen: undefined;
   OTPVerify: {email: string};
-  ForgotPasswordScreen: undefined;
-  SignupScreen: undefined;
+  ForgotPasswordScreen: {userEmail?: string};
+  SignupScreen: {userEmail?: string};
   HomeScreen: undefined;
+  ConfirmReset: {email: string};
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -32,6 +34,7 @@ export default function RootNavigator() {
           name="ForgotPasswordScreen"
           component={ForgotPasswordScreen}
         />
+        <Stack.Screen name="ConfirmReset" component={ConfirmReset} />
         <Stack.Screen name="SignupScreen" component={SignupScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
       </Stack.Navigator>

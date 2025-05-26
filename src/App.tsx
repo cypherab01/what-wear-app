@@ -6,7 +6,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="light-content" />
         <RootNavigator />
       </SafeAreaView>
     </SafeAreaProvider>

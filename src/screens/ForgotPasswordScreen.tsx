@@ -1,6 +1,12 @@
-import {NavigationProp} from '@react-navigation/native';
-import React from 'react';
 import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+  RouteProp,
+} from '@react-navigation/native';
+import React, {useEffect} from 'react';
+import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -14,18 +20,85 @@ import colors from '../../Colors';
 import {siteConfig} from '../config/site-config';
 import Description from '../components/Typography/Description';
 import Heading1 from '../components/Typography/Heading';
+import {validateEmail} from '../utils/validate-email';
+import {API_BASE_URL} from '@env';
 
-export default function ForgotPasswordScreen({
-  navigation,
-}: {
-  navigation: NavigationProp<any>;
-}) {
+type RootStackParamList = {
+  WelcomeScreen: undefined;
+  LoginScreen: undefined;
+  OTPVerify: {email: string};
+  ForgotPasswordScreen: {userEmail?: string};
+  SignupScreen: {userEmail?: string};
+  HomeScreen: undefined;
+  ConfirmReset: {email: string};
+};
+
+type ForgotPasswordScreenRouteProp = RouteProp<
+  RootStackParamList,
+  'ForgotPasswordScreen'
+>;
+
+export default function ForgotPasswordScreen() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const route = useRoute<ForgotPasswordScreenRouteProp>();
+  const userEmail = route.params?.userEmail;
+
   const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const handleLogin = () => {
-    console.log(email, password);
-    navigation.navigate('HomeScreen');
+  useEffect(() => {
+    if (userEmail) {
+      setEmail(userEmail);
+    }
+  }, [userEmail]);
+
+  const handleForgotPassword = async () => {
+    if (!validateEmail(email)) {
+      return Alert.alert('Invalid email');
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/reset-password`, {
+        method: 'POST',
+        body: JSON.stringify({email}),
+      });
+
+      const data = await response.json(); // Parse the response JSON once
+
+      switch (response.status) {
+        case 200:
+          Alert.alert('Check your email', data.message, [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('ConfirmReset', {email}),
+            },
+          ]);
+          break;
+
+        case 404:
+          Alert.alert('404 Not found', data.error, [
+            {
+              text: 'OK',
+              onPress: () =>
+                navigation.navigate('SignupScreen', {userEmail: email}),
+            },
+          ]);
+          break;
+
+        default:
+          Alert.alert('Error', 'Something went wrong');
+          break;
+      }
+    } catch (error) {
+      Alert.alert(
+        'Error',
+        'Something went wrong, make sure you are connected to the internet',
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -47,7 +120,12 @@ export default function ForgotPasswordScreen({
             style={styles.input}
           />
 
-          <Button mode="contained" onPress={handleLogin} style={styles.button}>
+          <Button
+            mode="contained"
+            onPress={handleForgotPassword}
+            loading={isLoading}
+            disabled={isLoading}
+            style={styles.button}>
             Submit
           </Button>
         </View>
